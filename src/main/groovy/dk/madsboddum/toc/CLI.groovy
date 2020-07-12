@@ -47,7 +47,9 @@ class CLI {
 			cmd = parser.parse(options, args.toArray() as String[])
 		} catch (ParseException e) {
 			// Invalid syntax
-			err.println(e.getMessage())
+			def pw = new PrintWriter(out)
+			pw.println(e.getMessage())
+			pw.close()
 			printHelp(err, options)	// Let's try to help the user along
 			
 			return 1
@@ -64,19 +66,24 @@ class CLI {
 			if (cmd.hasOption("print")) {
 				def items = tableOfContents.getItems()
 				items.each { item ->
-					out.println(item.fileName + "@" + tableOfContents.getTree(item.treFileIndex))
+					def pw = new PrintWriter(out)
+					pw.println(item.fileName + "@" + tableOfContents.getTree(item.treFileIndex))
+					pw.close()
 				}
 			}
 			
 			return 0
 		} else if (cmd.hasOption("version")) {
+			// Grab version
 			def versionProps = new Properties()
-			
 			versionProps.load(Application.getClassLoader().getResourceAsStream("version.properties"))
-			
 			def versionId = versionProps.get("version");
 			
-			out.println("toc version " + versionId)
+			// Print message with the version
+			def pw = new PrintWriter(out)
+			pw.println("toc version " + versionId)
+			pw.close()
+			
 			return 0
 		} else if (cmd.hasOption("help")) {
 			// They explicitly asked for help

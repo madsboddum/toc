@@ -3,6 +3,8 @@ package dk.madsboddum.toc
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
+import java.nio.charset.StandardCharsets
+
 import static org.junit.jupiter.api.Assertions.*
 
 class TestCLI {
@@ -30,6 +32,27 @@ class TestCLI {
 			def expectedExitCode = 0
 			
 			assertEquals(expectedExitCode, actualExitCode, "If --input is specified, then the application should run successfully")
+		}
+	}
+	
+	@Nested
+	class Version {
+		
+		@Test
+		void testMessageContainsVersion() {
+			def properties = new Properties()
+		
+			properties.load(TestCLI.classLoader.getResourceAsStream("version.properties"))
+			
+			String version = properties.get("version")
+			
+			def out = new ByteArrayOutputStream()
+			def cli = new CLI(out, System.err, null)
+			
+			cli.execute(["--version"])
+			def message = new String(out.toByteArray(), StandardCharsets.UTF_8)
+			
+			assertTrue(message.contains(version), "The printed message should contain the version")
 		}
 	}
 	
