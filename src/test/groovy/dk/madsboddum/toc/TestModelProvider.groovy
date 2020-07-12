@@ -62,9 +62,7 @@ class TestModelProvider {
 		void testAmount() {
 			def tocStream = TestModelProvider.getResourceAsStream("sku3_client.toc")
 			def provider = new ModelProvider(tocStream)
-			
 			def toc = provider.get()
-			
 			def trees = toc.getTrees()
 			
 			assertEquals(8, trees.size(), "The file has 8 trees, so the object should also have 8")
